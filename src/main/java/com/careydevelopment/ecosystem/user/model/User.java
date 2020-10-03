@@ -5,12 +5,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+@Document(collection = "#{@environment.getProperty('mongo.user.collection')}")
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 3592549577903104696L;
