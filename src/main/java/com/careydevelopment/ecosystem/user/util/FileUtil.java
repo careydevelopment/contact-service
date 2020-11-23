@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.careydevelopment.ecosystem.exception.file.CopyFileException;
 import com.careydevelopment.ecosystem.exception.file.FileTooLargeException;
 import com.careydevelopment.ecosystem.exception.file.MissingFileException;
 import com.careydevelopment.ecosystem.user.model.User;
@@ -28,17 +29,29 @@ public class FileUtil {
     private String userFilesBasePath;
 
 	
-    public void copyFile(MultipartFile file, User user) throws Exception {     
+    public void copyFile(MultipartFile file, User user, Long maxFileUploadSize) throws MissingFileException, FileTooLargeException, CopyFileException {
+        validateFile(file, maxFileUploadSize);
+        copyFile(file, user);
+    }
+
+    
+    private void copyFile(MultipartFile file, User user) throws CopyFileException {
         try (InputStream is = file.getInputStream()) {
             String newFileName = getNewFileName(file, user);
             Path rootLocation = Paths.get(getRootLocationForUserProfileImageUpload(user));
             Files.copy(is, rootLocation.resolve(newFileName));
         } catch (IOException ie) {
             LOG.error("Problem uploading file!", ie);
-            throw new Exception("Failed to upload!");
+            throw new CopyFileException("Failed to upload!");
         }
     }
-
+    
+    
+    private void validateFile(MultipartFile file, Long maxFileUploadSize) throws MissingFileException, FileTooLargeException {
+        checkFileExistence(file);
+        checkFileSize(file, maxFileUploadSize);
+    }
+    
     
     private String getNewFileName(MultipartFile file, User user) {
         LOG.debug("File name is " + file.getOriginalFilename());

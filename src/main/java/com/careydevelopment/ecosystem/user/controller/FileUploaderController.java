@@ -19,7 +19,7 @@ import com.careydevelopment.ecosystem.exception.file.MissingFileException;
 import com.careydevelopment.ecosystem.user.model.User;
 import com.careydevelopment.ecosystem.user.util.FileUtil;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @RestController
 public class FileUploaderController {
 	
@@ -39,11 +39,7 @@ public class FileUploaderController {
 		LOG.debug("User uploading is " + user);
 		
 		try {
-			fileUtil.checkFileExistence(file);
-			
-			fileUtil.checkFileSize(file, maxFileUploadSize);
-
-			fileUtil.copyFile(file, user);
+			fileUtil.copyFile(file, user, maxFileUploadSize);
 			
             return ResponseEntity.ok().build();
 		} catch (FileTooLargeException fe) {
