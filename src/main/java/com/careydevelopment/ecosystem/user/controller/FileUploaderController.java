@@ -24,22 +24,19 @@ import com.careydevelopment.ecosystem.user.util.FileUtil;
 public class FileUploaderController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(FileUploaderController.class);
-
-	@Value("${max.file.upload.size}")
-	private Long maxFileUploadSize;
 	
 	@Autowired
 	private FileUtil fileUtil;
 
 	
-	@PostMapping("/user/saveProfileImage")
+	@PostMapping("/user/profileImage")
 	public ResponseEntity<?> saveProfileImage(@RequestParam("file") MultipartFile file) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		User user = (User)authentication.getPrincipal();
 		LOG.debug("User uploading is " + user);
 		
 		try {
-			fileUtil.copyFile(file, user, maxFileUploadSize);
+			fileUtil.copyFile(file, user);
 			
             return ResponseEntity.ok().build();
 		} catch (FileTooLargeException fe) {

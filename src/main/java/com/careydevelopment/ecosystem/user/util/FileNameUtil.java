@@ -5,7 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import com.careydevelopment.ecosystem.user.model.User;
 
 public class FileNameUtil {
-	
+
+    
 	public static String createFileName(User user) {
 		String fileName = null;
 		

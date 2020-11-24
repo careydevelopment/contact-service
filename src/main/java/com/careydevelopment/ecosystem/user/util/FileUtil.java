@@ -28,14 +28,17 @@ public class FileUtil {
     @Value("{user.files.base.path}")
     private String userFilesBasePath;
 
+    @Value("${max.file.upload.size}")
+    private Long maxFileUploadSize;
+    
 	
-    public void copyFile(MultipartFile file, User user, Long maxFileUploadSize) throws MissingFileException, FileTooLargeException, CopyFileException {
+    public void copyFile(MultipartFile file, User user) throws MissingFileException, FileTooLargeException, CopyFileException {
         validateFile(file, maxFileUploadSize);
-        copyFile(file, user);
+        saveFile(file, user);
     }
 
     
-    private void copyFile(MultipartFile file, User user) throws CopyFileException {
+    private void saveFile(MultipartFile file, User user) throws CopyFileException {
         try (InputStream is = file.getInputStream()) {
             String newFileName = getNewFileName(file, user);
             Path rootLocation = Paths.get(getRootLocationForUserProfileImageUpload(user));
