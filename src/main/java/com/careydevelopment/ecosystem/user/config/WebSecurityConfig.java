@@ -51,14 +51,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
-			.csrf().disable()
-			.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-			.authorizeRequests() 
-			.antMatchers("/authenticate").permitAll()
-			.antMatchers(HttpMethod.GET, "/contact/**").access("hasAuthority('JWT_USER')")
-			.anyRequest().authenticated().and()
-			.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		    .cors().and()
+		    .csrf().disable()
+		    .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+		    .authorizeRequests() 
+		    .antMatchers("/authenticate").permitAll()
+		    .antMatchers(HttpMethod.GET, "/contact/**").access("hasAuthority('JWT_USER')")
+		    .anyRequest().authenticated().and()
+		    .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+		    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
-	
 }
