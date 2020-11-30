@@ -35,7 +35,7 @@ public class FileUploaderController {
 		LOG.debug("User uploading is " + user);
 		
 		try {
-			fileUtil.copyFile(file, user);
+			fileUtil.saveProfilePhoto(file, user);
 			
             return ResponseEntity.ok().build();
 		} catch (FileTooLargeException fe) {
