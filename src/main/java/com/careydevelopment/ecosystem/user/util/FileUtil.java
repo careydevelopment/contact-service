@@ -25,7 +25,7 @@ public class FileUtil {
 	
     private static final String PROFILE_DIR = "profile";
     
-    @Value("{user.files.base.path}")
+    @Value("${user.files.base.path}")
     private String userFilesBasePath;
 
     @Value("${max.file.upload.size}")
@@ -42,6 +42,9 @@ public class FileUtil {
         try (InputStream is = file.getInputStream()) {
             String newFileName = getNewFileName(file, user);
             Path rootLocation = Paths.get(getRootLocationForUserProfileImageUpload(user));
+            
+            LOG.debug("Saving file to " + rootLocation);
+            
             Files.copy(is, rootLocation.resolve(newFileName));
         } catch (IOException ie) {
             LOG.error("Problem uploading file!", ie);
