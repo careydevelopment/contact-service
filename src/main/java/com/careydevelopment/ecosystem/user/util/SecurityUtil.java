@@ -18,9 +18,6 @@ public class SecurityUtil {
         
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
-        LOG.debug("Current user is " + user.getId());
-        LOG.debug("Comparing to " + userId);
-        
         
         if (user != null && userId != null) {
             if (user.getId() != null) {

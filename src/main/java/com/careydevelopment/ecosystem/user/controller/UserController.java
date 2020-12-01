@@ -34,33 +34,25 @@ public class UserController {
     
     @GetMapping("/user/{userId}/profileImage")
     public ResponseEntity<?> getProfileImage(@PathVariable String userId) {        
-        boolean allowed = securityUtil.isAuthorizedByUserId(userId);
-        
-        LOG.debug("User allowed is " + allowed);
-        
-        if (allowed) {
-            try {
-                Path imagePath = fileUtil.fetchProfilePhotoByUserId(userId);
+        try {
+            Path imagePath = fileUtil.fetchProfilePhotoByUserId(userId);
+            
+            if (imagePath != null) {
+                LOG.debug("Getting image from " + imagePath.toString());
                 
-                if (imagePath != null) {
-                    LOG.debug("Getting image from " + imagePath.toString());
-                    
-                    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(imagePath));
-                    
-                    return ResponseEntity
-                            .ok()
-                            .contentLength(imagePath.toFile().length())
-                            .contentType(MediaType.IMAGE_JPEG)
-                            .body(resource);                    
-                } else {
-                    LOG.debug("Profile photo not found for user " + userId);
-                    return ResponseEntity.status(HttpStatus.OK).build();
-                }
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(imagePath));
+                
+                return ResponseEntity
+                        .ok()
+                        .contentLength(imagePath.toFile().length())
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);                    
+            } else {
+                LOG.debug("Profile photo not found for user " + userId);
+                return ResponseEntity.status(HttpStatus.OK).build();
             }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
