@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		    .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
 		    .authorizeRequests() 
 		    .antMatchers("/authenticate").permitAll()
+		    .antMatchers("/utilities/**").permitAll()
 		    .antMatchers(HttpMethod.GET, "/contact/**").access("hasAuthority('JWT_USER')")
 		    .anyRequest().authenticated().and()
 		    .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()

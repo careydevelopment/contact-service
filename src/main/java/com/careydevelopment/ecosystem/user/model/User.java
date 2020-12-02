@@ -30,7 +30,6 @@ public class User implements UserDetails {
 	private List<String> authorityNames = new ArrayList<String>();
 	private String username;
 	private String country;
-	private String profileImageFileName;
 	
 	@JsonIgnore
 	private String password;	
@@ -132,14 +131,6 @@ public class User implements UserDetails {
 		this.authorityNames = authorityNames;
 	}
 	
-	public String getProfileImageFileName() {
-		return profileImageFileName;
-	}
-	
-	public void setProfileImageFileName(String profileImageFileName) {
-		this.profileImageFileName = profileImageFileName;
-	}
-	
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
@@ -169,5 +160,4 @@ public class User implements UserDetails {
 
 		return list;
 	}
-	
 }
