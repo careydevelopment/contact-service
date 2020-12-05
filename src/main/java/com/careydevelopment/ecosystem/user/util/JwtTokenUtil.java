@@ -16,7 +16,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class JwtTokenUtil {
 
 	private static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60 * 1000;
-	public static final String SECRET = "mysecret";
+	
+	private static final String AUDIENCE = "careydevelopment-ecosystem-users";
+	private static final String ISSUER = "careydevelopment";
+	
+	public static String SECRET;
 	
 	private String token = null;
 	
@@ -74,6 +78,7 @@ public class JwtTokenUtil {
 		Map<String, Object> claims = new HashMap<String, Object>();
 		
 		claims.put("id", user.getId());
+		claims.put("authorities", user.getAuthorityNames());
 		
 		return claims;
 	}	
@@ -83,6 +88,8 @@ public class JwtTokenUtil {
 		String token= Jwts.builder()
 				.setClaims(claims)
 				.setSubject(subject)
+				.setIssuer(ISSUER)
+				.setAudience(AUDIENCE)
 				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY))
 				.signWith(SignatureAlgorithm.HS512, SECRET).compact();
@@ -94,7 +101,7 @@ public class JwtTokenUtil {
 	
 	public Boolean validateToken(UserDetails userDetails) {
 		final String username = getUsernameFromToken();
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired());
+		return (userDetails != null && username.equals(userDetails.getUsername()) && !isTokenExpired());
 	}
 	
 	
