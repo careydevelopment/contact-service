@@ -9,7 +9,7 @@ import com.careydevelopment.ecosystem.user.model.Hello;
 @RestController
 @CrossOrigin
 public class HelloWorldController {
-
+    
     @GetMapping("/helloworld")
     public Hello helloWorld() {
         return new Hello();

@@ -13,11 +13,19 @@ public class SecurityUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(SecurityUtil.class);
     
+    
+    public User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User)authentication.getPrincipal();
+
+        return user;
+    }
+    
+    
     public boolean isAuthorizedByUserId(String userId) {
         boolean authorized = false;
         
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User)authentication.getPrincipal();
+        User user = getCurrentUser();
         
         if (user != null && userId != null) {
             if (user.getId() != null) {

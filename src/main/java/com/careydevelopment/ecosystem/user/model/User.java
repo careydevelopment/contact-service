@@ -5,6 +5,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,17 +23,40 @@ public class User implements UserDetails {
 	private static final long serialVersionUID = 3592549577903104696L;
 
 	private String id;
+	
+	@NotBlank(message = "Please provide a first name")
 	private String firstName;
+	
+	@NotBlank(message = "Please provide a last name")
 	private String lastName;
+	
+	@NotBlank(message = "Please provide a street address")
 	private String street1;
+	
 	private String street2;
+	
+	@NotBlank(message = "Please provide a city")
 	private String city;
+	
+	@NotBlank(message = "Please provide a state")
 	private String state;
+	
+	@NotBlank(message = "Please provide a zip code")
 	private String zip;
+	
+	@NotBlank(message = "Please provide an email address")
+	@Email(message = "Please provide a valid email address")
 	private String email;
+	
+	@NotBlank(message = "Please provide a phone number")
 	private String phoneNumber;
+	
 	private List<String> authorityNames = new ArrayList<String>();
+	
+	@NotBlank(message = "Please provide a username")
 	private String username;
+	
+	@NotBlank(message = "Please provide a country")
 	private String country;
 	
 	@JsonIgnore
@@ -160,4 +188,9 @@ public class User implements UserDetails {
 
 		return list;
 	}
+	
+	public String toString() {
+        return ReflectionToStringBuilder.toString(this);
+    }
+
 }
