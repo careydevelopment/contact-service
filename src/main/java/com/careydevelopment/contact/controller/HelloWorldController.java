@@ -1,10 +1,10 @@
-package com.careydevelopment.ecosystem.user.controller;
+package com.careydevelopment.contact.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.careydevelopment.ecosystem.user.model.Hello;
+import com.careydevelopment.contact.model.Hello;
 
 @RestController
 @CrossOrigin

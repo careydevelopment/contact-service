@@ -1,4 +1,4 @@
-package com.careydevelopment.ecosystem.user.config;
+package com.careydevelopment.contact.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
@@ -13,27 +13,27 @@ import com.mongodb.client.MongoClients;
 
 @Configuration
 @EnableCaching
-@EnableMongoRepositories(basePackages= {"com.careydevelopment.ecosystem.user.repository"})
+@EnableMongoRepositories(basePackages= {"com.careydevelopment.ecosystem.contact.repository"})
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Value("${mongo.db.name}") 
-    private String ecosystemDb;
+    private String contactDb;
     
-    @Value("${ecosystem.properties.file.location}")
-    private String ecosystemPropertiesFile;
+    @Value("${contact.properties.file.location}")
+    private String contactPropertiesFile;
     
     @Override
     protected String getDatabaseName() {
-        return ecosystemDb;
+        return contactDb;
     }
   
     
     @Override
     @Bean
     public MongoClient mongoClient() {
-        PropertiesUtil propertiesUtil = new PropertiesUtil(ecosystemPropertiesFile);
-        String connectionString = propertiesUtil.getProperty("mongodb.carey-ecosystem.connection");
-        String fullConnectionString = connectionString + "/" + ecosystemDb;
+        PropertiesUtil propertiesUtil = new PropertiesUtil(contactPropertiesFile);
+        String connectionString = propertiesUtil.getProperty("mongodb.carey-contact.connection");
+        String fullConnectionString = connectionString + "/" + contactDb;
         
         MongoClient client = MongoClients.create(fullConnectionString);
         return client;

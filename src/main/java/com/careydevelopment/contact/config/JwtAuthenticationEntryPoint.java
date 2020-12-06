@@ -1,4 +1,4 @@
-package com.careydevelopment.ecosystem.user.config;
+package com.careydevelopment.contact.config;
 
 import java.io.IOException;
 

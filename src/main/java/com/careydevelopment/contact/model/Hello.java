@@ -1,4 +1,4 @@
-package com.careydevelopment.ecosystem.user.model;
+package com.careydevelopment.contact.model;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
