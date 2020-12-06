@@ -35,7 +35,6 @@ public class Contact {
 	
 	@Size(max = 50, message = "Source details cannot exceed 50 characters")
 	private String sourceDetails;
-	private WebsiteForm websiteFormSource;
 	
 	private ContactStatus status;
 	private long statusChange;
@@ -142,18 +141,6 @@ public class Contact {
 		this.sourceDetails = sourceDetails;
 	}
 
-
-	public WebsiteForm getWebsiteFormSource() {
-		return websiteFormSource;
-	}
-
-
-
-	public void setWebsiteFormSource(WebsiteForm websiteFormSource) {
-		this.websiteFormSource = websiteFormSource;
-	}
-
-	
 
 	public ContactStatus getStatus() {
 		return status;
