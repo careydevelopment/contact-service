@@ -13,7 +13,7 @@ import com.mongodb.client.MongoClients;
 
 @Configuration
 @EnableCaching
-@EnableMongoRepositories(basePackages= {"com.careydevelopment.ecosystem.contact.repository"})
+@EnableMongoRepositories(basePackages= {"com.careydevelopment.contact.repository"})
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Value("${mongo.db.name}") 
