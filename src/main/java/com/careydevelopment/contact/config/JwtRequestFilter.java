@@ -37,7 +37,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	private final String jwtSecret;
 	
 	
-	public JwtRequestFilter(@Value("${contact.properties.file.location}") String propertiesFile) {
+	public JwtRequestFilter(@Value("${ecosystem.properties.file.location}") String propertiesFile) {
 	    PropertiesUtil propertiesUtil = new PropertiesUtil(propertiesFile);
         jwtSecret = propertiesUtil.getProperty("jwt.secret");
 	}
@@ -67,6 +67,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
 	            chain.doFilter(request, response);
 			} catch (IllegalArgumentException e) {
+
                 response.sendError(HttpStatus.UNAUTHORIZED.value(), "Invalid token");
 			} catch (ExpiredJwtException e) {
                 response.sendError(HttpStatus.UNAUTHORIZED.value(), "Token expired");

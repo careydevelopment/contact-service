@@ -22,8 +22,8 @@ public class UserService {
     private WebClient userClient; 
     
     
-    public UserService(@Value("${endpoints.properties.file.location}") String endpoints) {
-        PropertiesUtil propertiesUtil = new PropertiesUtil(endpoints);
+    public UserService(@Value("${ecosystem.properties.file.location}") String ecosystemFile) {
+        PropertiesUtil propertiesUtil = new PropertiesUtil(ecosystemFile);
         String endpoint = propertiesUtil.getProperty("ecosystem-user-service.endpoint");
         userClient = WebClient.create(endpoint);
     }
