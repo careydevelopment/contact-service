@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 import com.careydevelopment.contact.model.Contact;
 import com.careydevelopment.contact.model.ErrorResponse;
-import com.careydevelopment.contact.model.ErrorsResponse;
 import com.careydevelopment.contact.model.ValidationError;
 import com.careydevelopment.contact.repository.ContactRepository;
 

@@ -11,7 +11,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.careydevelopment.contact.config.JwtRequestFilter;
 import com.careydevelopment.contact.model.SalesOwner;
-import com.careydevelopment.ecosystem.user.util.PropertiesUtil;
+import com.careydevelopment.contact.util.PropertiesUtil;
 
 @Service
 public class UserService {

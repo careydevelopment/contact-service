@@ -27,6 +27,14 @@ The locations of the external properties files are specified in the `application
 Here's a list of the properties in that external file:
 * jwt.secret - the secret used to sign JWTs
 * mongodb.carey-ecosystem.connection - the connection string to get to the MongoDB (in the format: mongodb://name:password@server:port)
+* ecosystem-user-service.endpoint - the base URL to <a href="https://github.com/careydevelopment/ecosystem-user-service">the user service</a>
+
+## Dependencies
+
+This service uses <a href="https://github.com/careydevelopment/ecosystem-user-service">ecoystem-user-service</a> to get user information. You'll
+need to deploy that service if you want to persist contacts. 
+
+You can see how this code integrates with the user service by looking at the <a href="https://github.com/careydevelopment/contact-service/blob/master/src/main/java/com/careydevelopment/contact/service/UserService.java">UserService</a> class.
 
 ## The UI
 The Carey Development CRM <a href="https://github.com/careydevelopment/careydevelopmentcrm">source</a> uses this service.
