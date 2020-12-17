@@ -90,7 +90,7 @@ public class ContactsController {
         ErrorResponse errorResponse = contactValidator.validateContact(contact);
         if (errorResponse != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        }
+        } 
         
         Contact newContact = contactRepository.save(contact);
         
