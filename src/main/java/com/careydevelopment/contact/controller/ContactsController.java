@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import com.careydevelopment.contact.model.SalesOwner;
 import com.careydevelopment.contact.repository.ContactRepository;
 import com.careydevelopment.contact.service.UserService;
 import com.careydevelopment.contact.util.ContactValidator;
+import com.careydevelopment.contact.util.SpaceUtil;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -48,7 +50,7 @@ public class ContactsController {
     public ResponseEntity<?> createContact(@Valid @RequestBody Contact contact, HttpServletRequest request) {
         LOG.debug("Creating new contact: " + contact);
         
-        ErrorResponse errorResponse = contactValidator.validateNewContact(contact);
+        ErrorResponse errorResponse = contactValidator.validateContact(contact);
         if (errorResponse != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
@@ -72,6 +74,27 @@ public class ContactsController {
         }
         
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateContact(@PathVariable("id") String id, @Valid @RequestBody Contact contact) {
+        LOG.debug("Updating contact id: " + id + " with data " + contact);
+        
+        if (id == null || id.trim().length() == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID is required");
+        } else if (!id.equals(contact.getId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID in URL and body don't match");
+        }
+
+        ErrorResponse errorResponse = contactValidator.validateContact(contact);
+        if (errorResponse != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+        
+        Contact newContact = contactRepository.save(contact);
+        
+        return ResponseEntity.ok(newContact);
     }
     
     
