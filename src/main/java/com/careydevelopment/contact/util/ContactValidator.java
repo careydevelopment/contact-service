@@ -15,8 +15,9 @@ public class ContactValidator {
     @Autowired
     private ContactRepository contactRepository;
     
-    public ErrorResponse validateNewContact(Contact contact) {
+    public ErrorResponse validateContact(Contact contact) {
         ErrorResponse errorResponse = new ErrorResponse();
+        contact = (Contact)SpaceUtil.trimReflective(contact);
         
         validateEmail(contact, errorResponse);
         
