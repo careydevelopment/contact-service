@@ -9,14 +9,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.careydevelopment.contact.config.JwtRequestFilter;
 import com.careydevelopment.contact.model.SalesOwner;
 import com.careydevelopment.contact.util.PropertiesUtil;
 
 @Service
 public class UserService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JwtRequestFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     
     private WebClient userClient; 
