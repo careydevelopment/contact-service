@@ -1,16 +1,20 @@
 package com.careydevelopment.contact.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +30,6 @@ import com.careydevelopment.contact.model.SalesOwner;
 import com.careydevelopment.contact.repository.ContactRepository;
 import com.careydevelopment.contact.service.UserService;
 import com.careydevelopment.contact.util.ContactValidator;
-import com.careydevelopment.contact.util.SpaceUtil;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -46,7 +49,7 @@ public class ContactsController {
     private ContactValidator contactValidator;
     
     
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<?> createContact(@Valid @RequestBody Contact contact, HttpServletRequest request) {
         LOG.debug("Creating new contact: " + contact);
         
@@ -95,6 +98,22 @@ public class ContactsController {
         Contact newContact = contactRepository.save(contact);
         
         return ResponseEntity.ok(newContact);
+    }
+
+    
+    @GetMapping("")
+    public ResponseEntity<?> fetchContacts() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String)authentication.getPrincipal();
+        
+        LOG.debug("Fetching all contacts for " + username);
+        
+        if (!StringUtils.isBlank(username)) {
+            List<Contact> contacts = contactRepository.findBySalesOwnerUsername(username);
+            return ResponseEntity.ok(contacts);
+        }
+        
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
     
     

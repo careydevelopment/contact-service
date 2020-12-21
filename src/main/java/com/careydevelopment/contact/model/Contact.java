@@ -39,7 +39,6 @@ public class Contact {
 	private ContactStatus status;
 	private long statusChange;
 	
-	@NotEmpty(message = "Please include at least one line of business")
 	private List<LineOfBusiness> linesOfBusiness;
 	
 	@Size(max = 50, message = "Company name cannot exceed 50 characters")
