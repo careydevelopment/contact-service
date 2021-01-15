@@ -5,6 +5,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import com.careydevelopment.contact.util.PropertiesUtil;
@@ -13,7 +14,7 @@ import com.mongodb.client.MongoClients;
 
 @Configuration
 @EnableCaching
-@EnableMongoRepositories(basePackages= {"com.careydevelopment.contact.repository"})
+@EnableMongoRepositories(basePackages = {"com.careydevelopment.contact.repository"})
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Value("${mongo.db.name}") 
@@ -38,5 +39,4 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
         MongoClient client = MongoClients.create(fullConnectionString);
         return client;
     }
-
 }
