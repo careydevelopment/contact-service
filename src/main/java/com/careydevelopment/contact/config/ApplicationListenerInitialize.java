@@ -20,7 +20,7 @@ public class ApplicationListenerInitialize implements ApplicationListener<Applic
 	private ContactService contactService;
 	
     public void onApplicationEvent(ApplicationReadyEvent event) {
-    	List<Contact> contacts = contactService.findContactsBySource(Source.EMAIL);
+    	List<Contact> contacts = contactService.findContactsBySource(Source.EMAIL, 1);
     	
     	try {
 	    	ObjectMapper objectMapper = new ObjectMapper();
