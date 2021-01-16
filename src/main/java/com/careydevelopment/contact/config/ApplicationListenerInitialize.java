@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import com.careydevelopment.contact.model.Contact;
 import com.careydevelopment.contact.model.Source;
 import com.careydevelopment.contact.service.ContactService;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class ApplicationListenerInitialize implements ApplicationListener<ApplicationReadyEvent>  {
@@ -19,7 +21,14 @@ public class ApplicationListenerInitialize implements ApplicationListener<Applic
 	
     public void onApplicationEvent(ApplicationReadyEvent event) {
     	List<Contact> contacts = contactService.findContactsBySource(Source.EMAIL);
-    	System.err.println(contacts);
+    	
+    	try {
+	    	ObjectMapper objectMapper = new ObjectMapper();
+	    	objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+	    	objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+	    	System.err.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(contacts));
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
-
 }

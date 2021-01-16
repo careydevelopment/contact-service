@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -37,7 +36,7 @@ public class Contact {
 	private String sourceDetails;
 	
 	private ContactStatus status;
-	private long statusChange;
+	private Long statusChange;
 	
 	private List<LineOfBusiness> linesOfBusiness;
 	
@@ -46,7 +45,7 @@ public class Contact {
 	
 	@Size(max = 50, message = "Title cannot exceed 50 characters")
 	private String title;
-	private boolean authority;
+	private Boolean authority;
 	private SalesOwner salesOwner;
 	
 	public String getId() {
@@ -189,13 +188,13 @@ public class Contact {
 
 
 
-	public boolean isAuthority() {
+	public Boolean isAuthority() {
 		return authority;
 	}
 
 
 
-	public void setAuthority(boolean authority) {
+	public void setAuthority(Boolean authority) {
 		this.authority = authority;
 	}
 	
@@ -211,13 +210,13 @@ public class Contact {
 	}
 
 
-	public long getStatusChange() {
+	public Long getStatusChange() {
 		return statusChange;
 	}
 
 
 
-	public void setStatusChange(long statusChange) {
+	public void setStatusChange(Long statusChange) {
 		this.statusChange = statusChange;
 	}
 
