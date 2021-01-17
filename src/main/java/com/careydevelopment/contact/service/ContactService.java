@@ -25,12 +25,12 @@ public class ContactService {
 	private MongoTemplate mongoTemplate;
 	
 	
-	public List<Contact> findContactsBySource(Source source, long elementsToSkip) {
+	public List<Contact> findContactsBySource(Source source, long maxDocuments) {
 		AggregationOperation match = Aggregation.match(Criteria.where("source").is(source));
 		AggregationOperation sort = Aggregation.sort(Direction.ASC, "lastName"); 
-		AggregationOperation skip = Aggregation.skip(elementsToSkip);
+		AggregationOperation limit = Aggregation.limit(maxDocuments);
 		
-		Aggregation aggregation = Aggregation.newAggregation(match, sort, skip);
+		Aggregation aggregation = Aggregation.newAggregation(match, sort, limit);
 		
 		List<Contact> contacts = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), Contact.class).getMappedResults();
 		
