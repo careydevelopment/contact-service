@@ -9,9 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.careydevelopment.contact.model.SalesOwner;
 import com.careydevelopment.contact.model.Source;
-import com.careydevelopment.contact.repository.ContactRepository;
 import com.careydevelopment.contact.service.ContactService;
-import com.careydevelopment.contact.service.UserService;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
