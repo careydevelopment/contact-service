@@ -1,7 +1,6 @@
 package com.careydevelopment.contact.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import com.careydevelopment.contact.model.Contact;
+import com.careydevelopment.contact.model.SalesOwner;
 import com.careydevelopment.contact.model.Source;
 
 @Service
@@ -87,6 +87,19 @@ public class ContactService {
 	}
 	
 	
+	public List<SalesOwner> findSalesOwnersBySource(Source source) {
+		AggregationOperation match = Aggregation.match(Criteria.where("source").is(source));
+		AggregationOperation replaceRoot = Aggregation.replaceRoot("salesOwner");
+		AggregationOperation group = Aggregation.group("lastName", "firstName");
+		
+		Aggregation aggregation = Aggregation.newAggregation(match, replaceRoot, group);
+		
+		List<SalesOwner> owners = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), SalesOwner.class).getMappedResults();
+		
+		return owners;
+	}
+	
+		
 	public static class ContactInfo {
 		private Source source;
 		private Long count;
