@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.careydevelopment.contact.model.Contact;
 import com.careydevelopment.contact.model.Source;
 import com.careydevelopment.contact.service.ContactService;
+import com.careydevelopment.contact.service.ContactService.ContactInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,13 +21,13 @@ public class ApplicationListenerInitialize implements ApplicationListener<Applic
 	private ContactService contactService;
 	
     public void onApplicationEvent(ApplicationReadyEvent event) {
-    	List<Contact> contacts = contactService.findContactsBySource(Source.EMAIL, 2);
+    	List<ContactInfo> contactInfo = contactService.groupContactsBySource();
     	
     	try {
 	    	ObjectMapper objectMapper = new ObjectMapper();
 	    	objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 	    	objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-	    	System.err.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(contacts));
+	    	System.err.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(contactInfo));
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
