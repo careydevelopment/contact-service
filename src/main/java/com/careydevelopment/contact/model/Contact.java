@@ -48,6 +48,8 @@ public class Contact {
 	private Boolean authority;
 	private SalesOwner salesOwner;
 	
+	private List<Sale> sales = new ArrayList<Sale>();
+	
 	public String getId() {
 		return id;
 	}
@@ -218,6 +220,18 @@ public class Contact {
 
 	public void setStatusChange(Long statusChange) {
 		this.statusChange = statusChange;
+	}
+
+
+
+	public List<Sale> getSales() {
+		return sales;
+	}
+
+
+
+	public void setSales(List<Sale> sales) {
+		this.sales = sales;
 	}
 
 

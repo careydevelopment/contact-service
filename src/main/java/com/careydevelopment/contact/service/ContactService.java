@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import com.careydevelopment.contact.model.Contact;
+import com.careydevelopment.contact.model.Sale;
 import com.careydevelopment.contact.model.SalesOwner;
 import com.careydevelopment.contact.model.Source;
 
@@ -99,7 +100,43 @@ public class ContactService {
 		return owners;
 	}
 	
+	
+	public List<SaleInfo> findFirstSaleForEachContact() {
+		AggregationOperation match = Aggregation.match(Criteria.where("sales").exists(true));
+		AggregationOperation unwind = Aggregation.unwind("sales");
+		AggregationOperation sort = Aggregation.sort(Direction.ASC, "sales.date");
+		AggregationOperation fullName = Aggregation.project("_id", "sales").and("firstName").concat(" ", Aggregation.fields("lastName")).as("contactName");
+		AggregationOperation group = Aggregation.group("contactName").first("sales").as("sale");
+		AggregationOperation project = Aggregation.project("sale").and("contactName").previousOperation();
 		
+		Aggregation aggregation = Aggregation.newAggregation(match, unwind, sort, fullName, group, project);
+
+		List<SaleInfo> saleInfo = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), SaleInfo.class).getMappedResults();
+		
+		return saleInfo;
+	}
+	
+	
+	public static class SaleInfo {
+		private String contactName;
+		private Sale sale;
+
+		
+		public String getContactName() {
+			return contactName;
+		}
+		public void setContactName(String contactName) {
+			this.contactName = contactName;
+		}
+		public Sale getSale() {
+			return sale;
+		}
+		public void setSale(Sale sale) {
+			this.sale = sale;
+		}
+	}
+	
+	
 	public static class ContactInfo {
 		private Source source;
 		private Long count;
