@@ -7,9 +7,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.careydevelopment.contact.model.SalesOwner;
-import com.careydevelopment.contact.model.Source;
 import com.careydevelopment.contact.service.ContactService;
+import com.careydevelopment.contact.service.ContactService.SaleInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,15 +18,14 @@ public class ApplicationListenerInitialize implements ApplicationListener<Applic
 	@Autowired
 	private ContactService contactService;
 	
-	
-    public void onApplicationEvent(ApplicationReadyEvent event) {    	
-    	List<SalesOwner> owners = contactService.findSalesOwnersBySource(Source.EMAIL);
+    public void onApplicationEvent(ApplicationReadyEvent event) {        	
+    	List<SaleInfo> sales = contactService.findFirstSaleForEachContact();
     	
     	try {
 	    	ObjectMapper objectMapper = new ObjectMapper();
 	    	objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 	    	objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-	    	System.err.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(owners));
+	    	System.err.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(sales));
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
