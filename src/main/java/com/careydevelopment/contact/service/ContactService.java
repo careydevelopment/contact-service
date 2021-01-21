@@ -117,9 +117,25 @@ public class ContactService {
 	}
 	
 	
+	public List<SaleInfo> getTotalSalesPerContact() {
+		AggregationOperation match = Aggregation.match(Criteria.where("sales").exists(true));
+		AggregationOperation unwind = Aggregation.unwind("sales");
+		AggregationOperation fullName = Aggregation.project("_id", "sales").and("firstName").concat(" ", Aggregation.fields("lastName")).as("contactName");
+		AggregationOperation group = Aggregation.group("contactName").sum("sales.value").as("totalSales");
+		AggregationOperation project = Aggregation.project("totalSales").and("contactName").previousOperation();
+		
+		Aggregation aggregation = Aggregation.newAggregation(match, unwind, fullName, group, project);
+
+		List<SaleInfo> saleInfo = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), SaleInfo.class).getMappedResults();
+		
+		return saleInfo;
+	}
+
+	
 	public static class SaleInfo {
 		private String contactName;
 		private Sale sale;
+		private Integer totalSales;
 
 		
 		public String getContactName() {
@@ -133,6 +149,12 @@ public class ContactService {
 		}
 		public void setSale(Sale sale) {
 			this.sale = sale;
+		}
+		public Integer getTotalSales() {
+			return totalSales;
+		}
+		public void setTotalSales(Integer totalSales) {
+			this.totalSales = totalSales;
 		}
 	}
 	

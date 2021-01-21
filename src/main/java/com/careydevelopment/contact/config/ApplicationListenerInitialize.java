@@ -19,7 +19,7 @@ public class ApplicationListenerInitialize implements ApplicationListener<Applic
 	private ContactService contactService;
 	
     public void onApplicationEvent(ApplicationReadyEvent event) {        	
-    	List<SaleInfo> sales = contactService.findFirstSaleForEachContact();
+    	List<SaleInfo> sales = contactService.getTotalSalesPerContact();
     	
     	try {
 	    	ObjectMapper objectMapper = new ObjectMapper();
