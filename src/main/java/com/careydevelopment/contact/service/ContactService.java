@@ -117,6 +117,20 @@ public class ContactService {
 	}
 	
 	
+	public List<Sale> listContactSales() {
+		AggregationOperation match = Aggregation.match(Criteria.where("sales").exists(true));
+		AggregationOperation unwind = Aggregation.unwind("sales");
+		AggregationOperation sort = Aggregation.sort(Direction.ASC, "sales.date");
+		AggregationOperation replaceRoot = Aggregation.replaceRoot("sales");
+		
+		Aggregation aggregation = Aggregation.newAggregation(match, unwind, sort, replaceRoot);
+
+		List<Sale> sales = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), Sale.class).getMappedResults();
+		
+		return sales;
+	}
+	
+	
 	public static class SaleInfo {
 		private String contactName;
 		private Sale sale;
