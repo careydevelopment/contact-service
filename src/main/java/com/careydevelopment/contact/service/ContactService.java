@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.ConditionalOperators;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +98,7 @@ public class ContactService {
 		
 		List<SalesOwner> owners = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), SalesOwner.class).getMappedResults();
 		
-		return owners;
+		return owners; 
 	}
 	
 	
@@ -117,24 +118,47 @@ public class ContactService {
 	}
 	
 	
-	public List<Sale> listContactSales() {
+	public List<SaleInfo> getTotalSalesPerContact() {
 		AggregationOperation match = Aggregation.match(Criteria.where("sales").exists(true));
 		AggregationOperation unwind = Aggregation.unwind("sales");
-		AggregationOperation sort = Aggregation.sort(Direction.ASC, "sales.date");
-		AggregationOperation replaceRoot = Aggregation.replaceRoot("sales");
+		AggregationOperation fullName = Aggregation.project("_id", "sales").and("firstName").concat(" ", Aggregation.fields("lastName")).as("contactName");
+		AggregationOperation group = Aggregation.group("contactName").sum("sales.value").as("totalSales");
+		AggregationOperation project = Aggregation.project("totalSales").and("contactName").previousOperation();
 		
-		Aggregation aggregation = Aggregation.newAggregation(match, unwind, sort, replaceRoot);
+		Aggregation aggregation = Aggregation.newAggregation(match, unwind, fullName, group, project);
 
-		List<Sale> sales = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), Sale.class).getMappedResults();
+		List<SaleInfo> saleInfo = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), SaleInfo.class).getMappedResults();
 		
-		return sales;
+		return saleInfo;
+	}
+
+	
+	public List<SaleInfo> getBigSalesPerContact() {
+		ConditionalOperators.Cond bigSalesCount = ConditionalOperators
+				.when(new Criteria("sales.value")
+				.gte(200000))
+				.then(1)
+				.otherwise(0);
+		
+		AggregationOperation unwind = Aggregation.unwind("sales", true);
+		AggregationOperation fullName = Aggregation.project("_id", "sales").and("firstName").concat(" ", Aggregation.fields("lastName")).as("contactName");
+		AggregationOperation group = Aggregation.group("contactName").sum(bigSalesCount).as("bigSales");
+		AggregationOperation project = Aggregation.project("bigSales").and("contactName").previousOperation();
+		
+		Aggregation aggregation = Aggregation.newAggregation(unwind, fullName, group, project);
+
+		List<SaleInfo> saleInfo = mongoTemplate.aggregate(aggregation, mongoTemplate.getCollectionName(Contact.class), SaleInfo.class).getMappedResults();
+		
+		return saleInfo;
 	}
 	
 	
 	public static class SaleInfo {
 		private String contactName;
 		private Sale sale;
-
+		private Integer totalSales;
+		private Integer bigSales;
+		
 		
 		public String getContactName() {
 			return contactName;
@@ -147,6 +171,18 @@ public class ContactService {
 		}
 		public void setSale(Sale sale) {
 			this.sale = sale;
+		}
+		public Integer getTotalSales() {
+			return totalSales;
+		}
+		public void setTotalSales(Integer totalSales) {
+			this.totalSales = totalSales;
+		}
+		public Integer getBigSales() {
+			return bigSales;
+		}
+		public void setBigSales(Integer bigSales) {
+			this.bigSales = bigSales;
 		}
 	}
 	

@@ -7,8 +7,8 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.careydevelopment.contact.model.Sale;
 import com.careydevelopment.contact.service.ContactService;
+import com.careydevelopment.contact.service.ContactService.SaleInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,9 +17,9 @@ public class ApplicationListenerInitialize implements ApplicationListener<Applic
 	
 	@Autowired
 	private ContactService contactService;
-	
+	 
     public void onApplicationEvent(ApplicationReadyEvent event) {        	
-    	List<Sale> sales = contactService.listContactSales();
+    	List<SaleInfo> sales = contactService.getBigSalesPerContact();
     	
     	try {
 	    	ObjectMapper objectMapper = new ObjectMapper();
