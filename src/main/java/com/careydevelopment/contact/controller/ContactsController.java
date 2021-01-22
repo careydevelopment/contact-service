@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -58,7 +59,9 @@ public class ContactsController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         
-        SalesOwner salesOwner = userService.fetchUser(request);
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        
+        SalesOwner salesOwner = userService.fetchUser(bearerToken);
         contact.setSalesOwner(salesOwner);
         
         Contact savedContact = contactRepository.insert(contact);
