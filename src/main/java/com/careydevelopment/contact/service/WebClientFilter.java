@@ -5,18 +5,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.reactive.function.client.ClientRequest;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 
+import reactor.core.publisher.Mono;
+
 public class WebClientFilter {
 
     private static final Logger LOG = LoggerFactory.getLogger(WebClientFilter.class);
 
 	
 	public static ExchangeFilterFunction logRequest() {
-		return (request, next) -> {
+		return ExchangeFilterFunction.ofRequestProcessor(request -> {
 			logMethodAndUrl(request);
 			logHeaders(request);
 			
-			return next.exchange(request);
-		};
+			return Mono.just(request);
+		});
 	}
 	
 	
