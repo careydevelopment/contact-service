@@ -14,8 +14,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import com.careydevelopment.contact.model.SalesOwner;
 import com.careydevelopment.contact.util.PropertiesUtil;
 
-import reactor.util.retry.Retry;
-
 
 @Service
 public class UserService {
