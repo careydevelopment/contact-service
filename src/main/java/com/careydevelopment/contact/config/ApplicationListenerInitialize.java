@@ -17,7 +17,8 @@ public class ApplicationListenerInitialize implements ApplicationListener<Applic
 	private UserService userService;
 	
     public void onApplicationEvent(ApplicationReadyEvent event) {        	
-    	SalesOwner owner = userService.fetchUser("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJ0aCIsImF1ZCI6ImNhcmV5ZGV2ZWxvcG1lbnQtZWNvc3lzdGVtLXVzZXJzIiwiaWQiOiI1Zjc4ZDhmYmMxZDMyNDZhYjQzMDNmMmIiLCJleHAiOjE2MTEzNDc5NDMsImlhdCI6MTYxMTI2MTU0MywiYXV0aG9yaXRpZXMiOlsiQ0FSRVlERVZFTE9QTUVOVF9DUk1fVVNFUiJdfQ.1x9rkEB3abEjMiRRtvSwgg4FFLPLdVT-jNDIztIRFF2dgqn50IVR50wmNXcinLBqSzD0KS_q1Uf6kbXA6UBgOQ");
+    	
+    	SalesOwner owner = userService.fetchUser("Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkYXJ0aCIsImF1ZCI6ImNhcmV5ZGV2ZWxvcG1lbnQtZWNvc3lzdGVtLXVzZXJzIiwiaWQiOiI1Zjc4ZDhmYmMxZDMyNDZhYjQzMDNmMmIiLCJleHAiOjE2MTE0MzEwODksImlhdCI6MTYxMTM0NDY4OSwiYXV0aG9yaXRpZXMiOlsiQ0FSRVlERVZFTE9QTUVOVF9DUk1fVVNFUiJdfQ.h29wdxb2V8wAPFLg48iSgoXwy4hQYQq03s8qYX3jBWWpKzb7KBFbp-R5fpOvD0aU7HdZH3l8UUm5BMOzxwcT5g");
     	
     	try {
 	    	ObjectMapper objectMapper = new ObjectMapper();
