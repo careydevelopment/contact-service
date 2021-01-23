@@ -56,7 +56,6 @@ public class WebClientFilter {
 		if (response.statusCode() != null && (response.statusCode().is4xxClientError() || response.statusCode().is5xxServerError())) {
 			return response.bodyToMono(String.class)
 					.flatMap(body -> {
-						System.err.println("Starting at " + System.currentTimeMillis());
 						LOG.debug("Body is {}", body);						
 						return Mono.error(new ServiceException(body, response.rawStatusCode()));
 					});
