@@ -33,7 +33,19 @@ public class WebClientFilter {
 		});
 	}
 	
+	
+	public static boolean is5xxException(Throwable ex) {
+		boolean eligible = false;
+		
+		if (ex instanceof ServiceException) {
+			ServiceException se = (ServiceException)ex;
+			eligible = (se.getStatusCode() > 499 && se.getStatusCode() < 600);
+		}
+		
+		return eligible;
+	};
 
+	
 	private static void logStatus(ClientResponse response) {
 		HttpStatus status = response.statusCode();
 		LOG.debug("Returned staus code {} ({})", status.value(), status.getReasonPhrase());
@@ -44,8 +56,9 @@ public class WebClientFilter {
 		if (response.statusCode() != null && (response.statusCode().is4xxClientError() || response.statusCode().is5xxServerError())) {
 			return response.bodyToMono(String.class)
 					.flatMap(body -> {
+						System.err.println("Starting at " + System.currentTimeMillis());
 						LOG.debug("Body is {}", body);						
-						return Mono.just(response);
+						return Mono.error(new ServiceException(body, response.rawStatusCode()));
 					});
 		} else {
 			return Mono.just(response);
