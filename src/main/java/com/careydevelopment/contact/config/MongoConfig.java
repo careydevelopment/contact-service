@@ -11,6 +11,7 @@ import com.careydevelopment.contact.util.PropertiesUtil;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
+
 @Configuration
 @EnableCaching
 @EnableMongoRepositories(basePackages = {"com.careydevelopment.contact.repository"})
