@@ -45,7 +45,7 @@ public class WebClientFilter {
 			return response.bodyToMono(String.class)
 					.flatMap(body -> {
 						LOG.debug("Body is {}", body);						
-						return Mono.just(response);
+						return Mono.error(new ServiceException(body, response.rawStatusCode()));
 					});
 		} else {
 			return Mono.just(response);

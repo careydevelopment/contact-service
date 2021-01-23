@@ -50,7 +50,7 @@ public class UserService {
 	        
 	        return salesOwner;
     	} catch (WebClientResponseException we) {
-    		throw new ServiceException(we.getMessage(), we.getRawStatusCode());
-    	} 
+    		throw new ServiceException (we.getMessage(), we.getRawStatusCode());
+    	}
     }
 }
