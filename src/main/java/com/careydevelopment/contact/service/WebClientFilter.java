@@ -48,7 +48,7 @@ public class WebClientFilter {
 	
 	private static void logStatus(ClientResponse response) {
 		HttpStatus status = response.statusCode();
-		LOG.debug("Returned staus code {} ({})", status.value(), status.getReasonPhrase());
+		LOG.debug("Returned staus code {} ({})", status.value(), status.getReasonPhrase());		
 	}
 	
 	
