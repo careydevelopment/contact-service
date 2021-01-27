@@ -86,7 +86,7 @@ public class ContactsController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateContact(@PathVariable("id") String id, @Valid @RequestBody Contact contact) {
         LOG.debug("Updating contact id: " + id + " with data " + contact);
-        
+                
         if (id == null || id.trim().length() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("ID is required");
         } else if (!id.equals(contact.getId())) {

@@ -42,10 +42,14 @@ public class SpaceUtil {
                     if (method.getReturnType().equals(String.class)) {
                         String property = (String) method.invoke(object);
                         if (property != null) {
-                            Method setter = c.getMethod("set" + name.substring(3),
-                                    new Class<?>[] { String.class });
-                            if (setter != null)
-                                setter.invoke(object, property.trim());
+                            try {
+                                Method setter = c.getMethod("set" + name.substring(3),
+                                        new Class<?>[] { String.class });
+                                if (setter != null)
+                                    setter.invoke(object, property.trim());
+                            } catch (NoSuchMethodException ne) {
+                                LOG.warn("Problem trying to set field " + name.substring(3));
+                            }
                         }
                     } else {
                         //handle child objects
