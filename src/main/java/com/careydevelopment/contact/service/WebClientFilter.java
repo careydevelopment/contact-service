@@ -29,7 +29,7 @@ public class WebClientFilter {
 			logStatus(response);
 			logHeaders(response);
 			
-			return logBody(response);
+			return Mono.just(response);
 		});
 	}
 	
@@ -52,16 +52,19 @@ public class WebClientFilter {
 	}
 	
 	
-	private static Mono<ClientResponse> logBody(ClientResponse response) {
-		if (response.statusCode() != null && (response.statusCode().is4xxClientError() || response.statusCode().is5xxServerError())) {
-			return response.bodyToMono(String.class)
-					.flatMap(body -> {
-						LOG.debug("Body is {}", body);						
-						return Mono.error(new ServiceException(body, response.rawStatusCode()));
-					});
-		} else {
-			return Mono.just(response);
-		}
+	public static ExchangeFilterFunction handleError() {
+	    return ExchangeFilterFunction.ofResponseProcessor(response -> {
+    		if (response.statusCode() != null && (response.statusCode().is4xxClientError() || response.statusCode().is5xxServerError())) {
+    			return response.bodyToMono(String.class)
+    			        .defaultIfEmpty(response.statusCode().getReasonPhrase())
+    					.flatMap(body -> {
+    						LOG.debug("Body is {}", body);						
+    						return Mono.error(new ServiceException(body, response.rawStatusCode()));
+    					});
+    		} else {
+    			return Mono.just(response);
+    		}
+	    });
 	}
 	
 	

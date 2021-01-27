@@ -27,7 +27,7 @@ public class ContactValidator {
     
     
     private void validateEmail(Contact contact, ErrorResponse errorResponse) {
-        if (emailExists(contact.getEmail())) {
+        if (StringUtils.isEmpty(contact.getId()) && emailExists(contact.getEmail())) {
             addError(errorResponse, "The email you entered already exists", "email", "emailExists");
         }
     }

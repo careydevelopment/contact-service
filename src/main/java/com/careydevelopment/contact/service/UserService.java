@@ -14,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import com.careydevelopment.contact.model.SalesOwner;
 import com.careydevelopment.contact.util.PropertiesUtil;
 
+import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
 
 
@@ -35,28 +36,25 @@ public class UserService {
 	        		.baseUrl(endpoint)
 	        		.filter(WebClientFilter.logRequest())
 	        		.filter(WebClientFilter.logResponse())
+	        		.filter(WebClientFilter.handleError())
 	        		.build();
     }
     
     
     public SalesOwner fetchUser(String bearerToken) {
-    	try {
-	        SalesOwner salesOwner = userClient.get()
-	                .uri("/user/me")
-	                .header(HttpHeaders.AUTHORIZATION, bearerToken)
-	                .retrieve()
-	                .bodyToMono(SalesOwner.class)
-	                .retryWhen(Retry.backoff(3, Duration.ofSeconds(5))
-	                		.filter(ex -> WebClientFilter.is5xxException(ex))
-	                		.onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> 
-	                			new ServiceException("Max retry attempts reached", HttpStatus.SERVICE_UNAVAILABLE.value())))
-	                .block();
-	        
-	        LOG.debug("User is " + salesOwner);
-	        
-	        return salesOwner;
-    	} catch (WebClientResponseException we) {
-    		throw new ServiceException(we.getMessage(), we.getRawStatusCode());
-    	} 
+        SalesOwner salesOwner = userClient.get()
+                .uri("/user/me")
+                .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                .retrieve()
+                .bodyToMono(SalesOwner.class)
+                .retryWhen(Retry.backoff(3, Duration.ofSeconds(5))
+                		.filter(ex -> WebClientFilter.is5xxException(ex))
+                		.onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> 
+                			new ServiceException("Max retry attempts reached", HttpStatus.SERVICE_UNAVAILABLE.value())))
+                .block();
+        
+        LOG.debug("User is " + salesOwner);
+        
+        return salesOwner;
     }
 }
